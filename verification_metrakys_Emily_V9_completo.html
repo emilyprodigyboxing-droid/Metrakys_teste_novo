@@ -395,7 +395,13 @@ footer{font-size:12px;color:#687386;margin-top:18px}
 
 <section class="card">
 <h3>1. Quick Report por avaliação</h3>
-<p class="note">Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. A ferramenta não envia os dados a servidores.</p>
+<p class="note">Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. Os dados só são enviados à nuvem quando solicita a gravação.</p>
+</section>
+
+<section class="card" id="cloudDraftSection">
+<h3>Rascunho na nuvem</h3>
+<div class="actions"><button type="button" class="secondary" id="saveCloudDraft">Guardar rascunho na nuvem</button></div>
+<p class="note" id="cloudDraftStatus" role="status" aria-live="polite">Não guardado.</p>
 </section>
 
 <section class="card" id="fullProjectBackupSection">
@@ -703,7 +709,7 @@ footer{font-size:12px;color:#687386;margin-top:18px}
   </div>
   <div class="actions"><button id="printReport" type="button">Imprimir seleção</button></div>
 </section>
-<footer>Ferramenta local: os dados são processados no seu navegador e não são enviados para nenhum servidor.</footer>
+<footer>Os dados são processados no navegador e enviados à nuvem apenas quando solicita a gravação.</footer>
 </div>
 <template id="evaluationTemplate">
 <article class="eval-card" data-evaluation>
@@ -777,7 +783,17 @@ const localePhrases={
  'Geometria de máquinas':['Geometria de máquinas','Machine Geometry','Geometría de máquinas'],
  'uso exclusivo da empresa Metrakys metrology.':['uso exclusivo da empresa Metrakys metrology.','For the exclusive use of Metrakys Metrology.','Uso exclusivo de la empresa Metrakys Metrology.'],
  '1. Quick Report por avaliação':['1. Quick Report por avaliação','1. Quick Report per assessment','1. Quick Report por evaluación'],
- 'Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. A ferramenta não envia os dados a servidores.':['Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. A ferramenta não envia os dados a servidores.','Paste the Quick Report into its assessment card and click “Read Quick Report”. Each assessment uses only its own card data. If the report contains multiple groups, select the desired group in that card. Data is not sent to any server.','Pegue el Quick Report en la tarjeta de evaluación correspondiente y haga clic en “Leer Quick Report”. Cada evaluación utiliza únicamente los datos de su tarjeta. Si el informe contiene varios grupos, seleccione el grupo deseado en esa tarjeta. Los datos no se envían a ningún servidor.'],
+ 'Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. Os dados só são enviados à nuvem quando solicita a gravação.':['Cole o Quick Report diretamente no card da avaliação correspondente e clique em “Ler Quick Report”. Cada avaliação usa apenas os dados do seu próprio card. Se o relatório contiver vários grupos, selecione o grupo desejado no mesmo card. Os dados só são enviados à nuvem quando solicita a gravação.','Paste the Quick Report into its assessment card and click “Read Quick Report”. Each assessment uses only its own card data. If the report contains multiple groups, select the desired group in that card. Data is sent to the cloud only when you request a save.','Pegue el Quick Report en la tarjeta de evaluación correspondiente y haga clic en “Leer Quick Report”. Cada evaluación utiliza únicamente los datos de su tarjeta. Si el informe contiene varios grupos, seleccione el grupo deseado en esa tarjeta. Los datos solo se envían a la nube cuando solicita guardarlos.'],
+ 'Rascunho na nuvem':['Rascunho na nuvem','Cloud draft','Borrador en la nube'],
+ 'Guardar rascunho na nuvem':['Guardar rascunho na nuvem','Save draft to cloud','Guardar borrador en la nube'],
+ 'Não guardado.':['Não guardado.','Not saved.','No guardado.'],
+ 'A guardar.':['A guardar.','Saving.','Guardando.'],
+ 'Guardado.':['Guardado.','Saved.','Guardado.'],
+ 'Erro ao guardar: {0}':['Erro ao guardar: {0}','Error saving: {0}','Error al guardar: {0}'],
+ 'Inicie sessão para guardar na nuvem.':['Inicie sessão para guardar na nuvem.','Sign in to save to the cloud.','Inicie sesión para guardar en la nube.'],
+ 'Termine as operações pendentes antes de guardar.':['Termine as operações pendentes antes de guardar.','Finish pending operations before saving.','Termine las operaciones pendientes antes de guardar.'],
+ 'O rascunho foi alterado noutra sessão ou já não está acessível. Não foi sobrescrito.':['O rascunho foi alterado noutra sessão ou já não está acessível. Não foi sobrescrito.','The draft was changed in another session or is no longer accessible. It was not overwritten.','El borrador se modificó en otra sesión o ya no está disponible. No se sobrescribió.'],
+ 'Não foi possível confirmar o estado do rascunho.':['Não foi possível confirmar o estado do rascunho.','Could not confirm the draft status.','No se pudo confirmar el estado del borrador.'],
  '2. Configuração':['2. Configuração','2. Configuration','2. Configuración'],
  'Preencha os dados do projeto e adicione uma configuração para cada combinação de eixo e tipo de avaliação que pretende gerar.':['Preencha os dados do projeto e adicione uma configuração para cada combinação de eixo e tipo de avaliação que pretende gerar.','Enter the project details and add a configuration for each axis and assessment type you want to generate.','Complete los datos del proyecto y añada una configuración para cada combinación de eje y tipo de evaluación que quiera generar.'],
  'Dados do projeto e da máquina':['Dados do projeto e da máquina','Project and machine details','Datos del proyecto y de la máquina'],
@@ -962,7 +978,7 @@ const localePhrases={
  'Gerar tabela de compensação':['Gerar tabela de compensação','Generate compensation table','Generar tabla de compensación'],
  'Copiar tabela':['Copiar tabela','Copy table','Copiar tabla'],
  'Exportar CSV':['Exportar CSV','Export CSV','Exportar CSV'],
- 'Ferramenta local: os dados são processados no seu navegador e não são enviados para nenhum servidor.':['Ferramenta local: os dados são processados no seu navegador e não são enviados para nenhum servidor.','Local tool: data is processed in your browser and is not sent to any server.','Herramienta local: los datos se procesan en su navegador y no se envían a ningún servidor.'],
+ 'Os dados são processados no navegador e enviados à nuvem apenas quando solicita a gravação.':['Os dados são processados no navegador e enviados à nuvem apenas quando solicita a gravação.','Data is processed in your browser and sent to the cloud only when you request a save.','Los datos se procesan en su navegador y solo se envían a la nube cuando solicita guardarlos.'],
  'Avaliação':['Avaliação','Assessment','Evaluación'],
  'Duplicar':['Duplicar','Duplicate','Duplicar'],
  'Remover':['Remover','Remove','Eliminar'],
@@ -7026,6 +7042,91 @@ $('fullProjectBackupFile').addEventListener('change',async event=>{
  }finally{
   fullProjectImportPending=false;
   $('importFullProjectBackup').disabled=false;
+ }
+});
+
+let activeCloudDraft=null;
+let cloudDraftSaving=false;
+let cloudDraftChanges=0;
+
+function setCloudDraftStatus(phrase,detail=''){
+ const status=$('cloudDraftStatus');
+ const translated=localePhrases[phrase][localeIndexes[currentLanguage]];
+ status.textContent=detail?translated.replace('{0}',()=>detail):translated;
+ status.className=`note${phrase==='Guardado.'?' status-ok':phrase==='Erro ao guardar: {0}'?' status-fail':''}`;
+}
+
+for(const type of ['input','change','click']){
+ document.addEventListener(type,event=>{
+  if(event.target.closest('#cloudDraftSection'))return;
+  if(type==='click'&&!event.target.closest('button,input,select'))return;
+  cloudDraftChanges++;
+  if(!cloudDraftSaving)setCloudDraftStatus('Não guardado.');
+ });
+}
+
+$('saveCloudDraft').addEventListener('click',async()=>{
+ if(cloudDraftSaving)return;
+ cloudDraftSaving=true;
+ $('saveCloudDraft').disabled=true;
+ setCloudDraftStatus('A guardar.');
+ try{
+  const {supabase}=await import('./supabase-client.js');
+  const {data:sessionData,error:sessionError}=await supabase.auth.getSession();
+  if(sessionError)throw sessionError;
+  const user=sessionData.session?.user;
+  if(!user?.id)throw new Error(localePhrases['Inicie sessão para guardar na nuvem.'][localeIndexes[currentLanguage]]);
+  if(pendingComplementaryOperations||pendingFullProjectExports||fullProjectImportPending||document.body.classList.contains('print-active')||document.querySelector('dialog[open]')){
+   throw new Error(localePhrases['Termine as operações pendentes antes de guardar.'][localeIndexes[currentLanguage]]);
+  }
+  if(!currentFormId)currentFormId=createFormId();
+  const evaluationId=currentFormId;
+  const payload=encodeProjectData(collectFullProjectData());
+  const payloadText=JSON.stringify(payload);
+  const changesAtCapture=cloudDraftChanges;
+  if(!activeCloudDraft||activeCloudDraft.ownerId!==user.id||activeCloudDraft.evaluationId!==evaluationId){
+   activeCloudDraft={id:createFormId(),ownerId:user.id,evaluationId,revision:null,insertPayload:null};
+  }
+  const draft=activeCloudDraft;
+  const conflict=()=>new Error(localePhrases['O rascunho foi alterado noutra sessão ou já não está acessível. Não foi sobrescrito.'][localeIndexes[currentLanguage]]);
+  if(draft.revision===null&&draft.insertPayload!==null){
+   const {data,error}=await supabase.from('evaluation_drafts')
+    .select('id,owner_id,evaluation_id,revision,payload')
+    .eq('id',draft.id).eq('owner_id',draft.ownerId).maybeSingle();
+   if(error)throw error;
+   if(data){
+    if(data.evaluation_id!==evaluationId||data.revision!==1||JSON.stringify(data.payload)!==draft.insertPayload)throw conflict();
+    draft.revision=data.revision;
+   }
+  }
+  let result;
+  if(draft.revision===null){
+   draft.insertPayload=payloadText;
+   result=await supabase.from('evaluation_drafts').insert({
+    id:draft.id,owner_id:draft.ownerId,evaluation_id:evaluationId,
+    payload,format_version:'V2',source_evaluation_id:null,revision:1
+   }).select('id,revision').maybeSingle();
+  }else{
+   if(!Number.isSafeInteger(draft.revision)||draft.revision<1||draft.revision>=2147483647)throw new Error(localePhrases['Não foi possível confirmar o estado do rascunho.'][localeIndexes[currentLanguage]]);
+   result=await supabase.from('evaluation_drafts').update({
+    payload,format_version:'V2',revision:draft.revision+1,updated_at:new Date().toISOString()
+   }).eq('id',draft.id).eq('owner_id',draft.ownerId).eq('evaluation_id',evaluationId)
+    .eq('revision',draft.revision).select('id,revision').maybeSingle();
+  }
+  if(result.error)throw result.error;
+  if(!result.data)throw conflict();
+  if(result.data.id!==draft.id||!Number.isSafeInteger(result.data.revision)||result.data.revision!==(draft.revision===null?1:draft.revision+1)){
+   throw new Error(localePhrases['Não foi possível confirmar o estado do rascunho.'][localeIndexes[currentLanguage]]);
+  }
+  draft.revision=result.data.revision;
+  draft.insertPayload=null;
+  setCloudDraftStatus(currentFormId===evaluationId&&cloudDraftChanges===changesAtCapture?'Guardado.':'Não guardado.');
+ }catch(error){
+  console.error('Erro ao guardar rascunho na nuvem:',error);
+  setCloudDraftStatus('Erro ao guardar: {0}',error.message||String(error));
+ }finally{
+  cloudDraftSaving=false;
+  $('saveCloudDraft').disabled=false;
  }
 });
 </script>
